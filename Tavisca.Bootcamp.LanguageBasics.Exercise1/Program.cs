@@ -24,93 +24,38 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         public static int FindDigit(string equation)
         {
             // Add your code here.
-            string[] input = equation.Split('*','=');                      //split the equation
-            int counter;
-            int num1, num2, formNumber;
-
-            //check input1 and input2 and missing digit number
-            //case 1: number * number = missing digit number
-            if(Int32.TryParse(input[0], out counter) && Int32.TryParse(input[1], out counter)) 
+            Helper helper = new Helper();
+            string[] equationArray = equation.Split('*','=');   
+            int operand1 = 0, operand2 = 0;
+            string expectedResult = "";                   //split the equation
+            //case 1: findingDigit * operand2 = result
+            if(helper.IsMissingDigit(equationArray[0]))
             {
-                num1 = Int32.Parse(input[0]);
-                num2 = Int32.Parse(input[1]);
-                string result = (num1*num2).ToString();
-                //checking Invalid Input values
-                if(result.Length != input[2].Length)
-                {
-                    return -1;
-                }
-                else
-                {
-                    int index = input[2].IndexOf('?');
-
-                    //Check valid equation with extra ?
-                    if(index > result.Length)
-                        return -1;
-
-                    formNumber = Int32.Parse(input[2].Replace('?',result[index]));
-
-                    //check final result
-                    if(num1 * num2 == formNumber)
-                        return Int32.Parse(result[index].ToString());
-                    return -1;
-                }
+                operand1 = int.Parse(equationArray[2]);
+                operand2 = int.Parse(equationArray[1]);
+                expectedResult = equationArray[0];
+                string calculatedResult = helper.Calculation(operand1, operand2, "/");
+                return helper.FindMissingDigit(calculatedResult, expectedResult);
             }
-
-            //case 2: missing digit number * number = number
-            else if(Int32.TryParse(input[1], out counter) && Int32.TryParse(input[2], out counter))
+            //case 2: operand1 * findingDigit = result
+            else if(helper.IsMissingDigit(equationArray[1]))
             {
-                num1 = Int32.Parse(input[1]);
-                num2 = Int32.Parse(input[2]);
-                string result = (num2/num1).ToString();
-                //checking Invalid Input values
-                if(result.Length < input[0].Length)
-                {
-                    return -1;
-                }
-                else
-                {
-                    int index = input[0].IndexOf('?');
-
-                    //Check valid equation with extra ?
-                    if(index > result.Length)
-                        return -1;
-
-                    formNumber = Int32.Parse(input[0].Replace('?',result[index]));
-
-                    //check final result
-                    if(num2 / num1 == formNumber)
-                        return Int32.Parse(result[index].ToString());
-                    return -1;
-                }
+                operand1 = int.Parse(equationArray[2]);
+                operand2 = int.Parse(equationArray[0]);
+                expectedResult = equationArray[1];
+                string calculatedResult = helper.Calculation(operand1, operand2, "/");
+                return helper.FindMissingDigit(calculatedResult, expectedResult);
             }
-
-            //case 3: number * missing digit number = number
+            //case 3: operand1 * operand2 = findingResult
             else
             {
-                num1 = Int32.Parse(input[0]);
-                num2 = Int32.Parse(input[2]);
-                string result = (num2/num1).ToString();
-                //checking Invalid Input values
-                if(result.Length < input[1].Length)
-                {
+                operand1 = int.Parse(equationArray[0]);
+                operand2 = int.Parse(equationArray[1]);
+                expectedResult = equationArray[2];
+                string calculatedResult = helper.Calculation(operand1, operand2, "*");
+                if(calculatedResult.Equals("false"))
                     return -1;
-                }
-                else
-                {
-                    int index = input[1].IndexOf('?');
-
-                    //Check valid equation with extra ?
-                    if(index > result.Length)
-                        return -1;
-
-                    formNumber = Int32.Parse(input[1].Replace('?',result[index]));
-
-                    //check final result
-                    if(num1 * formNumber == num2)
-                        return Int32.Parse(result[index].ToString());
-                    return -1;
-                }
+                return helper.FindMissingDigit(calculatedResult, expectedResult);
             }
             throw new NotImplementedException();
         }
