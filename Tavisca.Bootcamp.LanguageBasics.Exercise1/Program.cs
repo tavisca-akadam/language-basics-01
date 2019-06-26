@@ -35,6 +35,8 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 operand2 = int.Parse(equationArray[1]);
                 expectedResult = equationArray[0];
                 string calculatedResult = helper.Calculation(operand1, operand2, "/");
+                if(calculatedResult.Equals("false"))
+                    return -1;
                 return helper.FindMissingDigit(calculatedResult, expectedResult);
             }
             //case 2: operand1 * findingDigit = result
@@ -44,6 +46,8 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 operand2 = int.Parse(equationArray[0]);
                 expectedResult = equationArray[1];
                 string calculatedResult = helper.Calculation(operand1, operand2, "/");
+                if(calculatedResult.Equals("false"))
+                    return -1;
                 return helper.FindMissingDigit(calculatedResult, expectedResult);
             }
             //case 3: operand1 * operand2 = findingResult
@@ -53,8 +57,6 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                 operand2 = int.Parse(equationArray[1]);
                 expectedResult = equationArray[2];
                 string calculatedResult = helper.Calculation(operand1, operand2, "*");
-                if(calculatedResult.Equals("false"))
-                    return -1;
                 return helper.FindMissingDigit(calculatedResult, expectedResult);
             }
             throw new NotImplementedException();
